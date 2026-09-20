@@ -49,5 +49,38 @@ services:
       timeout: 5s
       retries: 5
 
+  consumer-server:
+    build: ./consumer/server
+    container_name: consumer-server
+    ports:
+      - "3002:3002"
+    environment:
+      PORT: 3002
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3002/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  consumer-client:
+    build: ./consumer/client
+    container_name: consumer-client
+    ports:
+      - "5174:80"
+    depends_on:
+      consumer-server:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 volumes:
   rabbitmq_data:
