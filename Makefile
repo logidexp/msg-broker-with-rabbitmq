@@ -1,4 +1,4 @@
-.PHONY: up down restart logs status
+.PHONY: up down restart logs status install client server
 
 up:
 	docker compose up -d
@@ -14,3 +14,13 @@ logs:
 
 status:
 	docker compose ps
+
+install:
+	npm --prefix broker/server install
+	npm --prefix broker/client install
+
+run-broker-server:
+	npm run start --prefix broker/server
+
+run-broker-client:
+	npm run dev --prefix broker/client
