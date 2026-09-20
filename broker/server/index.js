@@ -7,6 +7,6 @@ app.get("/health", (_req, res) => {
   res.json({ status: "ok" });
 });
 
-app.listen(port, () => {
-  console.log(`broker server listening on http://localhost:${port}`);
+app.listen(port, "0.0.0.0", () => {
+  console.log(`broker server listening on http://0.0.0.0:${port}`);
 });

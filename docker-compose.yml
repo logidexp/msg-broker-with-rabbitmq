@@ -16,5 +16,38 @@ services:
       timeout: 5s
       retries: 5
 
+  broker-server:
+    build: ./broker/server
+    container_name: broker-server
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3001/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  broker-client:
+    build: ./broker/client
+    container_name: broker-client
+    ports:
+      - "5173:80"
+    depends_on:
+      broker-server:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 volumes:
   rabbitmq_data:
