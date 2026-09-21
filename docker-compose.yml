@@ -23,6 +23,10 @@ services:
       - "3001:3001"
     environment:
       PORT: 3001
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
     healthcheck:
       test:
         [
@@ -56,6 +60,10 @@ services:
       - "3002:3002"
     environment:
       PORT: 3002
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
     healthcheck:
       test:
         [

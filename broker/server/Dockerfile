@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 
-COPY index.js ./
+COPY index.js rabbitmq.js ./
 
 ENV PORT=3001
 EXPOSE 3001
